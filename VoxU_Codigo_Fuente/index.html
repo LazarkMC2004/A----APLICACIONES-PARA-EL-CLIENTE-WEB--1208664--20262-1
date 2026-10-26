@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rai — Participación Electrónica ULEAM</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-mark">V</div><div><strong>Rayo choi</strong><small>Participación electrónica</small></div></div>
+  <div><div class="nav-label">Espacio de trabajo</div><nav class="nav" id="nav">
+    <button class="active" data-view="dashboard"><span class="ico">▦</span>Resumen</button>
+    <button data-view="surveys"><span class="ico">▤</span>Encuestas</button>
+    <button data-view="create"><span class="ico">＋</span>Crear encuesta</button>
+    <button data-view="respond"><span class="ico">✎</span>Responder encuesta</button>
+    <button data-view="users"><span class="ico">♙</span>Usuarios registrados</button>
+    <button data-view="results"><span class="ico">▥</span>Resultados</button>
+    <button data-view="admin"><span class="ico">⚙</span>Administración</button>
+  </nav></div>
+  <div class="side-bottom"><b>Prototipo académico</b>Los datos se guardan en este navegador. No requiere instalación ni conexión a un servidor.</div>
+</aside>
+<main class="main">
+<header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="mobile-menu" id="menuBtn" aria-label="Abrir menú">☰</button><div class="crumb">Rai / <b id="crumb">Resumen</b></div></div><div class="top-right"><div class="status"><span class="dot"></span> Sistema operativo</div><div class="avatar">VU</div></div></header>
+<div class="content">
+<section class="section active" id="view-dashboard">
+ <div class="welcome"><div><div class="eyebrow">Panel de control</div><h1>Hola, bienvenido a Rai 👋</h1><p>Gestiona encuestas, participa y consulta resultados desde un solo lugar.</p></div><button class="btn btn-primary" data-go="create">＋ Crear encuesta</button></div>
+ <div class="stats">
+  <div class="stat"><div class="stat-head">Encuestas creadas <span class="stat-icon">▤</span></div><div class="stat-num" id="statSurveys">0</div><div class="stat-foot">En este navegador</div></div>
+  <div class="stat"><div class="stat-head">Respuestas recibidas <span class="stat-icon">✉</span></div><div class="stat-num" id="statResponses">0</div><div class="stat-foot">Total registrado</div></div>
+  <div class="stat"><div class="stat-head">Encuestas activas <span class="stat-icon">◉</span></div><div class="stat-num" id="statActive">0</div><div class="stat-foot">Disponibles para responder</div></div>
+  <div class="stat"><div class="stat-head">Participantes <span class="stat-icon">♙</span></div><div class="stat-num" id="statPeople">0</div><div class="stat-foot">Personas registradas</div></div>
+ </div>
+ <div class="layout">
+  <div class="panel"><div class="panel-head"><div><h2>Encuestas recientes</h2><p>Acceso rápido a tus encuestas</p></div><button class="btn btn-ghost btn-small" data-go="surveys">Ver todas →</button></div><div class="panel-body"><div class="survey-list" id="recentList"></div></div></div>
+  <div class="panel"><div class="panel-head"><div><h2>Actividad reciente</h2><p>Movimientos en el sistema</p></div></div><div class="panel-body"><div class="activity" id="activityList"></div></div></div>
+ </div>
+ <div class="footer-note">Rai · Sistema de participación electrónica mediante encuestas · Prototipo académico</div>
+</section>
+<section class="section" id="view-surveys">
+ <div class="welcome"><div><div class="eyebrow">Gestión</div><h1>Encuestas</h1><p>Consulta, comparte, edita o administra las encuestas registradas.</p></div><button class="btn btn-primary" data-go="create">＋ Nueva encuesta</button></div>
+ <div class="filters"><input class="search" id="surveySearch" placeholder="Buscar por título..." style="max-width:300px"><select class="search" id="surveyFilter" style="max-width:180px"><option value="all">Todos los estados</option><option value="active">Activas</option><option value="closed">Cerradas</option></select></div>
+ <div class="panel"><div class="table-wrap"><table><thead><tr><th>Encuesta</th><th>Preguntas</th><th>Respuestas</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="surveyTable"></tbody></table></div></div>
+</section>
+<section class="section" id="view-create">
+ <div class="welcome"><div><div class="eyebrow">Constructor</div><h1 id="createHeading">Crear encuesta</h1><p>Define el tema y añade preguntas para recopilar opiniones.</p></div></div>
+ <div class="panel"><div class="panel-head"><div><h2>Información de la encuesta</h2><p>Los campos marcados son obligatorios</p></div></div><div class="panel-body">
+ <div class="notice">Validaciones activas: título obligatorio, longitud mínima, preguntas completas y al menos dos opciones para preguntas de selección.</div>
+ <form id="surveyForm" novalidate><input type="hidden" id="editId">
+ <div class="form-grid">
+ <div class="field" id="titleField"><label for="surveyTitle">Título de la encuesta *</label><input id="surveyTitle" maxlength="90" placeholder="Ej. Opinión sobre servicios universitarios"><span class="error">Escribe un título de entre 5 y 90 caracteres.</span></div>
+ <div class="field" id="categoryField"><label for="surveyCategory">Categoría *</label><select id="surveyCategory"><option value="">Seleccionar categoría</option><option>Vida universitaria</option><option>Servicios académicos</option><option>Tecnología</option><option>Bienestar estudiantil</option><option>Infraestructura</option><option>Otra</option></select><span class="error">Selecciona una categoría.</span></div>
+ <div class="field full" id="descField"><label for="surveyDesc">Descripción *</label><textarea id="surveyDesc" maxlength="500" placeholder="Explica brevemente el propósito de esta encuesta."></textarea><span class="error">La descripción debe tener al menos 10 caracteres.</span></div>
+ </div>
+ <div style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;gap:10px"><div><h2 style="font-size:14px;margin:0">Preguntas</h2><p class="hint">Añade preguntas claras para tus participantes.</p></div><button type="button" class="btn btn-soft" id="addQuestion">＋ Añadir pregunta</button></div>
+ <div id="questionBuilder"></div>
+ <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px"><button type="button" class="btn btn-ghost" id="resetForm">Cancelar</button><button type="submit" class="btn btn-primary">✓ Guardar encuesta</button></div>
+ </form></div></div>
+</section>
+<section class="section" id="view-respond">
+ <div class="welcome"><div><div class="eyebrow">Participación</div><h1>Responder encuesta</h1><p>Selecciona una encuesta activa y envía tus respuestas.</p></div></div>
+ <div class="panel"><div class="panel-head"><div><h2>Encuestas disponibles</h2><p>Completa los campos obligatorios para registrar tu participación.</p></div></div><div class="panel-body" id="respondContent"></div></div>
+</section>
+<section class="section" id="view-users">
+ <div class="welcome"><div><div class="eyebrow">Registro</div><h1>Usuarios registrados</h1><p>Registra participantes y consulta las personas que han enviado encuestas.</p></div><button class="btn btn-primary" id="newUserBtn">＋ Registrar usuario</button></div>
+ <div class="stats">
+  <div class="stat"><div class="stat-head">Usuarios registrados <span class="stat-icon">♙</span></div><div class="stat-num" id="registeredUsersCount">0</div><div class="stat-foot">Formulario de participantes</div></div>
+  <div class="stat"><div class="stat-head">Participantes únicos <span class="stat-icon">✓</span></div><div class="stat-num" id="uniqueRespondentsCount">0</div><div class="stat-foot">Con respuestas guardadas</div></div>
+ </div>
+ <div class="panel"><div class="panel-head"><div><h2>Directorio de usuarios</h2><p>Los registros se conservan en este navegador.</p></div><input class="search" id="userSearch" placeholder="Buscar nombre o correo..." style="max-width:260px"></div>
+ <div class="table-wrap"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Fecha de registro</th><th>Origen</th><th>Acciones</th></tr></thead><tbody id="usersTable"></tbody></table></div></div>
+ <div class="footer-note">Privacidad: usa datos de prueba en demostraciones. Esta versión local no sincroniza usuarios con otros dispositivos.</div>
+</section>
+<section class="section" id="view-results">
+ <div class="welcome"><div><div class="eyebrow">Análisis</div><h1>Resultados</h1><p>Consulta las respuestas y la distribución de cada opción.</p></div></div>
+ <div class="field" style="max-width:440px"><label for="resultSelect">Seleccionar encuesta</label><select id="resultSelect"></select></div>
+ <div id="resultContent"></div>
+</section>
+<section class="section" id="view-admin">
+ <div class="welcome"><div><div class="eyebrow">Configuración</div><h1>Administración</h1><p>Gestiona los datos de este prototipo y revisa su estado.</p></div></div>
+ <div class="layout">
+ <div class="panel"><div class="panel-head"><h2>Estado del sistema</h2></div><div class="panel-body">
+ <div class="activity">
+ <div class="activity-row"><div class="activity-icon">✓</div><div><b>Validación de formularios</b><small>Campos obligatorios y formatos comprobados antes de guardar.</small></div></div>
+ <div class="activity-row"><div class="activity-icon">▣</div><div><b>Almacenamiento local</b><small>Los registros se conservan en este navegador mediante localStorage.</small></div></div>
+ <div class="activity-row"><div class="activity-icon">↻</div><div><b>Exportación de datos</b><small>Descarga una copia de las encuestas y respuestas en formato JSON.</small></div></div>
+ </div></div></div>
+ <div class="panel"><div class="panel-head"><h2>Herramientas de administración</h2></div><div class="panel-body">
+ <div style="margin-bottom:20px"><b style="font-size:13px">Exportar respaldo</b><p class="hint">Descarga todos los datos guardados para conservar una copia.</p><button class="btn btn-primary" id="exportBtn">↓ Exportar datos JSON</button></div>
+ <div style="border-top:1px solid var(--line);padding-top:18px"><b style="font-size:13px">Cargar datos de demostración</b><p class="hint">Añade una encuesta de ejemplo si todavía no hay encuestas.</p><button class="btn btn-soft" id="demoBtn">＋ Añadir ejemplo</button></div>
+ <div style="border-top:1px solid var(--line);padding-top:18px;margin-top:18px"><b style="font-size:13px;color:var(--red)">Zona de riesgo</b><p class="hint">Borra todas las encuestas y respuestas almacenadas en este navegador. Esta acción no se puede deshacer.</p><button class="btn btn-danger" id="clearBtn">Eliminar todos los datos</button></div>
+ </div></div>
+ </div>
+ <div class="footer-note">Importante: esta versión funciona como prototipo local. No incluye cuentas reales, publicación en internet ni base de datos compartida.</div>
+</section>
+</div></main></div>
+<div class="modal-backdrop" id="modal"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Responder encuesta</h2><button class="close" id="modalClose" aria-label="Cerrar">×</button></div><div class="modal-content" id="modalContent"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="script.js" defer></script>
+</body>
+</html>
